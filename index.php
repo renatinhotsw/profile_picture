@@ -21,10 +21,6 @@ border:1px solid black;
 </script>
 
 
-
-</script>
-
-
 </head>
 
 <center>
