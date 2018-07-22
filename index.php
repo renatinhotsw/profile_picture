@@ -1,85 +1,62 @@
 <html>
+
 <head>
-<style>
-.image{
-    width:120px;
-    height:120px
-}
-.div{
-border:1px solid black;
-
-}
-
-
-</style>
-
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-
-</script>
+  <meta charset="utf-8"></meta>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
 
 
 </head>
 
-<center>
-<form id="frm1">
-    <input type="file" id="img_input"/>
-    <br /><img id="img_preview" src="" alt="Foto Colaborador" />
-</form>
-</center>
+<body>
+    <center>
+      <div>
+          <img src="img/default.jpeg" class="image">
+      </div>
+      <input type="file" id="profile_image" class="btn btn-primary"></input>
+      <br><br><br>
+
+      <div id="resultado"></div>
+    </center>
+
+</body>
 
 </html>
 
 <script>
 
-function ImagePreview(input)
-{
+$(function(){
+    $('#profile_image').change( function(e) {
 
-    if (input.files && input.files[0])
-	{
+        var img = URL.createObjectURL(e.target.files[0]);
+        $('.image').attr('src', img);
 
-        var r = new FileReader();
+    });
 
-        r.onload = function(e)
-		{
-			$("#img_preview").show();
-            $("#img_preview").attr("src", e.target.result);
-        }
+    $('#profile_image').click(function(){
+        $.ajax(
+              {url: "carregar.php",
+              success: function(result){
+              $("#resultado").html(result);
+              $( "#msg" ).slideUp( 300 ).delay( 2500 ).fadeIn( 800 );
+        }});
+    });
 
-        r.readAsDataURL(input.files[0]);
-
-    }
-}
-
-$().ready(function() {
-
-	hide_empty_image = false;
-	set_blank_to_empty_image = false;
-	set_image_border = true;
-
-	if (hide_empty_image)
-		$("#img_preview").hide();
-
-	if (set_blank_to_empty_image)
-		$("#img_preview").attr("src","data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=");
-
-	if (set_image_border)
-		$("#img_preview").css("border", "1px solid #05bbcc");
-  
-    $("#img_preview").css("width", "150px");
-    $("#img_preview").css("height", "150px");
-
-	$("#img_input").change(function(){
-		ImagePreview(this);
-	});
 
 });
+
 </script>
 
+<?php
 
-	
+	if(!file_exists($ac)){
+		mkdir("/opt/lampp/htdocs/images", 0777,true);
+	}else{
+		echo 'NON existe';
+	}
 
-	
 
+	echo $ac;
+?>
